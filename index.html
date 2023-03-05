@@ -1,0 +1,69 @@
+<!--
+ * @Author: Mason
+ * @Date: 2023-03-01 23:00:12
+ * @LastEditors: Mason
+ * @LastEditTime: 2023-03-05 10:45:02
+ * @FilePath: /single-spa/index.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <a href="#/app1">应用 1</a>
+    <a href="#/app2">应用 2</a>
+
+    <script src="/lib/umd/single-spa.js"></script>
+    <script>
+        // 参数 1）注册应用的名字 2）加载 app 的方法必须返回一个 promise 方法
+        singleSpa.registerApplication('app1',
+            async () => {
+                // 这个函数需要返回结果
+                return {
+                    bootstrap: async () => {
+                        console.log('bootstrap1');
+                    },
+                    mount: async () => {
+                        console.log('mount1');
+                    },
+                    unmount: async () => {
+                        console.log('unmounted1');
+                    },
+                }
+            },
+            location => location.hash.startsWith('#/app1'), //根据路径来判断是否应该加载
+            { store: { name: 'zf', age: 10 } }
+        )
+
+        singleSpa.registerApplication('app2',
+            async () => {
+                // 这个函数需要返回结果
+                return {
+                    bootstrap: async () => {
+                        console.log('bootstrap2');
+                    },
+                    mount: async () => {
+                        console.log('mount2');
+                    },
+                    unmount: async () => {
+                        console.log('unmounted2');
+                    },
+                }
+            },
+            location => location.hash.startsWith('#/app2'), //根据路径来判断是否应该加载
+            { store: { name: 'zf', age: 20 } }
+        )
+
+        singleSpa.start() // 启动这个应用
+        // registerApplication 默认会加载这个应用
+        // start时会挂载应用
+    </script>
+</body>
+
+</html>
